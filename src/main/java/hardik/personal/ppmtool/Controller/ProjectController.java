@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
@@ -46,5 +43,47 @@ public class ProjectController {
          return new ResponseEntity<Project>(project,HttpStatus.OK);
 
     }
+
+    @GetMapping("{projectId}")
+    public  ResponseEntity<?> getProjectFromIdentifier(@PathVariable String projectId) {
+        Project project = projectService.findByProjectIdentifier(projectId);
+
+        if(project==null)
+            return new ResponseEntity<String>("NOT FOUND BRO",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<Project>(project, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/findAll")
+    public  ResponseEntity<?> getAllProjects() {
+        Iterable<Project>  p = projectService.findAll();
+         System.out.println("hello");
+
+
+//
+//        if(project==null)
+//            return new ResponseEntity<String>("NOT FOUND BRO",HttpStatus.NOT_FOUND);
+     return new ResponseEntity<Iterable<Project>>(p, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/delete/{projectId}")
+    public ResponseEntity<?> deleteByIdentifierId(@PathVariable String projectId)
+    {
+
+
+
+        Project project = projectService.findByProjectIdentifier(projectId);
+        if(project==null)
+        {
+            return new ResponseEntity<String>("NOT FOUND BRO",HttpStatus.NOT_FOUND);
+        }
+        projectService.deleteById(project);
+        return new ResponseEntity<String>(projectId+ "deleted",HttpStatus.OK);
+
+
+    }
+
+
 
 }

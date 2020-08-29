@@ -2,6 +2,7 @@ package hardik.personal.ppmtool.services;
 
 import hardik.personal.ppmtool.domain.Backlog;
 import hardik.personal.ppmtool.domain.Project;
+import hardik.personal.ppmtool.repositories.BacklogRespository;
 import hardik.personal.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,8 @@ public class ProjectService {
       @Autowired
     ProjectRepository projectRepository;
 
-
+@Autowired
+    BacklogRespository backlogRespository;
 
 
     public Project saveOrUpdateProject(Project project)
@@ -27,6 +29,14 @@ public class ProjectService {
               project.setBacklog(backlog);
               backlog.setProject(project);
               backlog.setProjectIdentifier(project.getProjectIdentifier());
+          }
+
+          if(project.getId()!=null)
+          {
+
+             project.setBacklog(backlogRespository.findByProjectIdentifier(project.getProjectIdentifier()));
+
+
           }
 
           return projectRepository.save(project);

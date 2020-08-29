@@ -20,7 +20,7 @@ public class Project {
    private String projectName;
 
    @Size(max=5,min=4,
-           message = "Should be minimum 4 length")
+           message = "Should be minimum 4 length and maximum 5 length")
    @Column(updatable=false,unique = true)
    private String projectIdentifier;
 
